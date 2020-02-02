@@ -28,6 +28,11 @@ public class AuthorService {
     public List<Author> getAuthorByName(String authorName) {
         return this.authorRepository.findByAuthorNameContaining(authorName);
     }
+
+    public Author addAuthor(Author author) {
+        return this.authorRepository.save(author);
+    }
+
     public Author getOne(Integer authorId) {
         return this.authorRepository.findById(authorId).get();
     }

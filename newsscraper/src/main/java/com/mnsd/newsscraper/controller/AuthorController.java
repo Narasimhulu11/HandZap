@@ -4,10 +4,7 @@ import com.mnsd.newsscraper.model.Author;
 import com.mnsd.newsscraper.service.AuthorService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /**
@@ -63,6 +60,25 @@ public class AuthorController {
         }catch (Exception ex){
             log.error("Exception occurred at getAuthorByName for authorName: {} and exception is {}",
                     authorName,
+                    ex.toString());
+        }
+        return authors;
+    }
+
+    /**
+     *  rest api to add author
+     * @param author request body that maps author in Author class
+     * @return returns author
+     */
+    @ApiOperation(value = "rest api to add author")
+    @PostMapping("/add")
+    public Author addAuthor(@RequestBody Author author){
+        Author authors = null;
+        try {
+            authors= this.authorService.addAuthor(author);
+        }catch (Exception ex){
+            log.error("Exception occurred at getAuthorByName for author: {} and exception is {}",
+                    author,
                     ex.toString());
         }
         return authors;
