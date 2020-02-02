@@ -28,4 +28,7 @@ public class AuthorService {
     public List<Author> getAuthorByName(String authorName) {
         return this.authorRepository.findByAuthorNameContaining(authorName);
     }
+    public Author getOne(Integer authorId) {
+        return this.authorRepository.findById(authorId).get();
+    }
 }

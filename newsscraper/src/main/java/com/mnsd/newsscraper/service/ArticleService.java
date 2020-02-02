@@ -1,7 +1,6 @@
 package com.mnsd.newsscraper.service;
 
-import com.mnsd.newsscraper.model.Articles;
-import com.mnsd.newsscraper.model.Author;
+import com.mnsd.newsscraper.model.*;
 import com.mnsd.newsscraper.repository.ArticleRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +17,18 @@ public class ArticleService {
 
     private ArticleRepository articleRepository;
 
-    public ArticleService(ArticleRepository articleRepository) {
-        this.articleRepository = articleRepository;
-    }
+    private ArticleCategoryService articleCategoryService;
+    private ArticleCityService articleCityService;
+    private AuthorService authorService;
+    private TagsService tagsService;
 
+    public ArticleService(ArticleRepository articleRepository, ArticleCategoryService articleCategoryService, ArticleCityService articleCityService, AuthorService authorService, TagsService tagsService) {
+        this.articleRepository = articleRepository;
+        this.articleCategoryService = articleCategoryService;
+        this.articleCityService = articleCityService;
+        this.authorService = authorService;
+        this.tagsService = tagsService;
+    }
     public List<Articles> getAllArticlesByTitle(String title) {
         return this.articleRepository.findByArticleTitleContaining(title);
     }
@@ -65,5 +72,18 @@ public class ArticleService {
 
     public List<Articles> getArticlesByCategory(String category) {
         return this.articleRepository.findByCategory(category);
+    }
+
+    public Articles addArticle(ArticlesDto articlesDto) {
+        ArticleCategory articleCategory =articleCategoryService.getOne(articlesDto.getArticleCategoryId());
+        ArticleCity articleCity =articleCityService.getOne(articlesDto.getPincode());
+        Author author = authorService.getOne(articlesDto.getAuthorId());
+        List<Tags> tags = tagsService.getTags(articlesDto.getTagsId());
+        Articles articles=new  Articles(articlesDto.getArticleTitle(),articlesDto.getArticleDescription(),articleCategory,new Date(),articleCity,tags,author);
+        return this.articleRepository.save(articles);
+    }
+
+    public List<Articles> getAllArticle() {
+        return articleRepository.findAll();
     }
 }

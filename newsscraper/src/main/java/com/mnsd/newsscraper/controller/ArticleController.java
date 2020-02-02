@@ -1,6 +1,7 @@
 package com.mnsd.newsscraper.controller;
 
 import com.mnsd.newsscraper.model.Articles;
+import com.mnsd.newsscraper.model.ArticlesDto;
 import com.mnsd.newsscraper.model.Author;
 import com.mnsd.newsscraper.service.ArticleService;
 import io.swagger.annotations.ApiOperation;
@@ -246,4 +247,39 @@ public class ArticleController {
         return articles;
     }
 
+    /**
+     * rest api to add Article
+     * @param articlesDto
+     * @return returns Article
+     */
+    @ApiOperation(value = "rest api to add article")
+    @PostMapping("/add")
+    public Articles addArticle(@RequestBody ArticlesDto articlesDto){
+        Articles articles = null;
+        try {
+            articles = this.articleService.addArticle(articlesDto);
+        }catch (Exception ex){
+            log.error("Exception occurred at addArticle for articlesDto: {} and exception is {}",
+                    articlesDto,
+                    ex.toString());
+        }
+        return articles;
+    }
+
+    /**
+     * get All Articles
+     * @return returns list of articles
+     */
+    @ApiOperation(value = "rest api to get all articles ")
+    @GetMapping("/get")
+    public List<Articles> getAllArticle(){
+        List<Articles> articles = null;
+        try {
+            articles = this.articleService.getAllArticle();
+        }catch (Exception ex){
+            log.error("Exception occurred at addArticle exception is {}",
+                    ex.toString());
+        }
+        return articles;
+    }
 }
